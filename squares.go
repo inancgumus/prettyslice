@@ -32,27 +32,41 @@ var (
 type drawing struct {
 	slice, backer reflect.Value
 
-	buf strings.Builder
+	buf *strings.Builder
 
 	// draw multiple items or just one?
 	multiple bool
 }
 
 // Show pretty prints slices
-func Show(msg string, slice interface{}) {
-	d := create(slice)
+func Show(msg string, slices ...interface{}) {
+	buf := new(strings.Builder)
 
-	d.header(msg)
-	d.wrap("╔", "╗")
-	d.push("\n")
-	d.middle()
-	d.wrap("╚", "╝")
+	for i, slice := range slices {
+		d := create(slice, buf)
 
-	d.render()
+		// only draw header for the first item
+		if i == 0 {
+			d.header(msg)
+		}
+
+		// draw the slice elements
+		d.wrap("╔", "╗")
+		d.push("\n")
+		d.middle()
+		d.wrap("╚", "╝")
+
+		// dont put a new line after the last slice
+		if i+1 < len(slices) {
+			d.push("\n")
+		}
+	}
+
+	render(Writer, buf)
 }
 
 // create initializes a new drawing struct.
-func create(slice interface{}) *drawing {
+func create(slice interface{}, buf *strings.Builder) *drawing {
 	s := reflect.ValueOf(slice)
 
 	multiple := true
@@ -68,6 +82,7 @@ func create(slice interface{}) *drawing {
 		// this contains the backing array's data, after the slice's pointer.
 		backer:   s.Slice(0, s.Cap()),
 		multiple: multiple,
+		buf:      buf,
 	}
 }
 
@@ -141,14 +156,14 @@ func (d *drawing) push(s string) {
 }
 
 // render draws the drawings into the Writer
-func (d *drawing) render() {
+func render(w io.Writer, buf *strings.Builder) {
 	// if the Writer supports WriteString method then use it
 	if w, ok := Writer.(stringWriter); ok {
-		w.WriteString(d.buf.String() + "\n")
+		w.WriteString(buf.String() + "\n")
 		return
 	}
 	// or print it using Fprintln
-	fmt.Fprintln(Writer, d.buf)
+	fmt.Fprintln(Writer, buf)
 }
 
 // just for checking whether the Writer implements the WriteString method
