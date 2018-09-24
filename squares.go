@@ -66,6 +66,21 @@ func Show(msg string, slices ...interface{}) {
 	render(Writer, buf)
 }
 
+// Colors is used to enable/disable the color data from the output
+func Colors(enabled bool) {
+	colors := []*color.Color{
+		ColorHeader, ColorSlice, ColorBacker,
+	}
+
+	for _, color := range colors {
+		if enabled {
+			color.EnableColor()
+		} else {
+			color.DisableColor()
+		}
+	}
+}
+
 // create initializes a new drawing struct.
 func create(slice interface{}, buf *strings.Builder) *drawing {
 	s := reflect.ValueOf(slice)
