@@ -37,8 +37,8 @@ func main() {
 
 	nums := []int{1, 3, 5, 2, 4, 8}
 
-	s.Colors(false)
 	s.Writer = f
+	s.Colors(false)
 	s.Show("nums", nums)
 }
 ````

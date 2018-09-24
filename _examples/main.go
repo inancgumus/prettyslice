@@ -22,7 +22,7 @@ func main() {
 	f, _ := os.Create("out.txt")
 	defer f.Close()
 
-	s.Colors(false)
 	s.Writer = f
+	s.Colors(false)
 	s.Show("nums", nums)
 }
