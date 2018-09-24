@@ -23,4 +23,24 @@ func main() {
 ### Output:
 ![](https://github.com/inancgumus/prettyslice/raw/master/slices.png)
 
+## Example #2 — Render Colorless
+
+```go
+package main
+
+import s "github.com/inancgumus/prettyslice"
+
+func main() {
+	// Render colorless output to a file
+	f, _ := os.Create("out.txt")
+	defer f.Close()
+
+	nums := []int{1, 3, 5, 2, 4, 8}
+
+	s.Colors(false)
+	s.Writer = f
+	s.Show("nums", nums)
+}
+````
+
 Have fun!

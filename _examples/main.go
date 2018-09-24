@@ -21,8 +21,8 @@ func main() {
 	// Render colorless output to a file
 	f, _ := os.Create("out.txt")
 	defer f.Close()
-	s.Writer = f
 
 	s.Colors(false)
+	s.Writer = f
 	s.Show("nums", nums)
 }
