@@ -122,7 +122,11 @@ func (d *drawing) middle() {
 
 // pointer simplifies the pointer data for easy viewing
 func (d *drawing) pointer() int64 {
-	s := int64(d.slice.Index(0).Type().Size())    // normalize to the size
+	var s int64 = 1
+	if d.slice.Len() > 0 {
+		s = int64(d.slice.Index(0).Type().Size()) // normalize to the size
+	}
+
 	return (int64(d.slice.Pointer()) / s) % 10000 // get rid of the leading digits
 }
 
