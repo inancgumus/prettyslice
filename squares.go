@@ -45,10 +45,11 @@ func Show(msg string, slices ...interface{}) {
 	for i, slice := range slices {
 		d := create(slice, buf)
 
-		// only draw header for the first item
-		if i == 0 {
-			d.header(msg)
+		// only draw the message for the first item (grouping)
+		if i > 0 {
+			msg = ""
 		}
+		d.header(msg)
 
 		// draw the slice elements
 		d.wrap("╔", "╗")
