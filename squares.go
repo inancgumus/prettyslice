@@ -82,7 +82,7 @@ func Colors(enabled bool) {
 }
 
 // create initializes a new drawing struct.
-func create(slice interface{}, buf *strings.Builder) *drawing {
+func create(slice interface{}, buf *strings.Builder) drawing {
 	s := reflect.ValueOf(slice)
 
 	multiple := true
@@ -93,7 +93,7 @@ func create(slice interface{}, buf *strings.Builder) *drawing {
 		multiple = false
 	}
 
-	return &drawing{
+	return drawing{
 		slice: s,
 		// this contains the backing array's data, after the slice's pointer.
 		backer:   s.Slice(0, s.Cap()),
@@ -103,7 +103,7 @@ func create(slice interface{}, buf *strings.Builder) *drawing {
 }
 
 // header draws the header information about the slice with a message
-func (d *drawing) header(msg string) {
+func (d drawing) header(msg string) {
 	var info string
 	if d.multiple {
 		info = fmt.Sprintf(
@@ -116,7 +116,7 @@ func (d *drawing) header(msg string) {
 }
 
 // wrap draws the header and the footer depending on the left and right values
-func (d *drawing) wrap(left, right string) {
+func (d drawing) wrap(left, right string) {
 	for i, v := range over(d.backer) {
 		c, l, r, m := ColorSlice, left, right, "═"
 		if d.backing(i) {
@@ -132,7 +132,7 @@ func (d *drawing) wrap(left, right string) {
 }
 
 // middle draws the item's value wrapped between pipes
-func (d *drawing) middle() {
+func (d drawing) middle() {
 	for i, v := range over(d.backer) {
 		p, c := "║", ColorSlice
 		if d.backing(i) {
@@ -152,7 +152,7 @@ func (d *drawing) middle() {
 }
 
 // pointer simplifies the pointer data for easy viewing
-func (d *drawing) pointer() int64 {
+func (d drawing) pointer() int64 {
 	var s int64 = 1
 	if d.slice.Len() > 0 {
 		s = int64(d.slice.Index(0).Type().Size()) // normalize to the size
@@ -162,12 +162,12 @@ func (d *drawing) pointer() int64 {
 }
 
 // backing is true if the index belongs to the backing array
-func (d *drawing) backing(index int) bool {
+func (d drawing) backing(index int) bool {
 	return index+1 > d.slice.Len()
 }
 
 // push appends a new string into the drawing's buffer
-func (d *drawing) push(s string) {
+func (d drawing) push(s string) {
 	d.buf.WriteString(s)
 }
 
