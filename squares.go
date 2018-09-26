@@ -66,7 +66,8 @@ func Show(msg string, slices ...interface{}) {
 		}
 	}
 
-	render(Writer, buf)
+	// WriteString already checks for WriteString method
+	io.WriteString(Writer, buf.String()+"\n")
 }
 
 // Colors is used to enable/disable the color data from the output
@@ -181,12 +182,6 @@ func (d drawing) backing(index int) bool {
 // push appends a new string into the drawing's buffer
 func (d drawing) push(s string) {
 	d.buf.WriteString(s)
-}
-
-// render draws the drawings into the Writer
-func render(w io.Writer, buf *strings.Builder) {
-	// WriteString already checks for WriteString method
-	io.WriteString(Writer, buf.String()+"\n")
 }
 
 // slen gets the length of a utf-8 string.
