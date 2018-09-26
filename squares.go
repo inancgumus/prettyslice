@@ -185,13 +185,14 @@ func (d drawing) push(s string) {
 
 // render draws the drawings into the Writer
 func render(w io.Writer, buf *strings.Builder) {
+	s := buf.String() + "\n"
+
 	// if the Writer supports WriteString method then use it
 	if w, ok := Writer.(stringWriter); ok {
-		w.WriteString(buf.String() + "\n")
+		w.WriteString(s)
 		return
 	}
-	// or print it using Fprintln
-	fmt.Fprintln(Writer, buf)
+	io.WriteString(Writer, s)
 }
 
 // just for checking whether the Writer implements the WriteString method
