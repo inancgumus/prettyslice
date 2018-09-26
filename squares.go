@@ -24,6 +24,9 @@ var (
 	// ColorBacker sets the color for the backing array's items
 	ColorBacker = color.New(color.FgHiBlack)
 
+	// Width is the max allowed slice items on a line
+	Width = 0
+
 	// Writer controls where to draw the slices
 	Writer io.Writer = os.Stdout
 )
@@ -118,6 +121,10 @@ func (d drawing) header(msg string) {
 // wrap draws the header and the footer depending on the left and right values
 func (d drawing) wrap(left, right string) {
 	for i, v := range over(d.backer) {
+		if enough(i) {
+			break
+		}
+
 		c, l, r, m := ColorSlice, left, right, "═"
 		if d.backing(i) {
 			c, l, r, m = ColorBacker, "+", "+", "-"
@@ -134,6 +141,11 @@ func (d drawing) wrap(left, right string) {
 // middle draws the item's value wrapped between pipes
 func (d drawing) middle() {
 	for i, v := range over(d.backer) {
+		if enough(i) {
+			d.push(ColorBacker.Sprintf(" ..."))
+			break
+		}
+
 		p, c := "║", ColorSlice
 		if d.backing(i) {
 			p, c = "|", ColorBacker
@@ -163,7 +175,7 @@ func (d drawing) pointer() int64 {
 
 // backing is true if the index belongs to the backing array
 func (d drawing) backing(index int) bool {
-	return index+1 > d.slice.Len()
+	return index >= d.slice.Len()
 }
 
 // push appends a new string into the drawing's buffer
@@ -215,6 +227,11 @@ func over(slice reflect.Value) []string {
 		values[i] = s
 	}
 	return values
+}
+
+// enough is true if the current is > Width
+func enough(index int) bool {
+	return Width > 0 && index >= Width
 }
 
 func makeSlice(v reflect.Value) reflect.Value {
