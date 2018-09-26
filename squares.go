@@ -59,15 +59,11 @@ func Show(msg string, slices ...interface{}) {
 		d.push("\n")
 		d.middle()
 		d.wrap("╚", "╝")
-
-		// dont put a new line after the last slice
-		if i+1 < len(slices) {
-			d.push("\n")
-		}
+		d.push("\n")
 	}
 
 	// WriteString already checks for WriteString method
-	io.WriteString(Writer, buf.String()+"\n")
+	io.WriteString(Writer, buf.String())
 }
 
 // Colors is used to enable/disable the color data from the output
