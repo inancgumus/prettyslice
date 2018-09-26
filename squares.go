@@ -185,19 +185,8 @@ func (d drawing) push(s string) {
 
 // render draws the drawings into the Writer
 func render(w io.Writer, buf *strings.Builder) {
-	s := buf.String() + "\n"
-
-	// if the Writer supports WriteString method then use it
-	if w, ok := Writer.(stringWriter); ok {
-		w.WriteString(s)
-		return
-	}
-	io.WriteString(Writer, s)
-}
-
-// just for checking whether the Writer implements the WriteString method
-type stringWriter interface {
-	WriteString(s string) (n int, err error)
+	// WriteString already checks for WriteString method
+	io.WriteString(Writer, buf.String()+"\n")
 }
 
 // slen gets the length of a utf-8 string.
