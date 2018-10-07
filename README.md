@@ -1,3 +1,5 @@
+[![Go Report Card](https://goreportcard.com/badge/github.com/inancgumus/prettyslice)](https://goreportcard.com/report/github.com/inancgumus/prettyslice)
+
 # Pretty Slice Printer
 It pretty prints **any type of** slices to any [io.Writer](https://golang.org/pkg/io/#Writer) with adjustable **coloring** features.
 
