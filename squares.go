@@ -186,26 +186,11 @@ func slen(s string) int {
 	return utf8.RuneCountInString(s)
 }
 
-// over helps you to range over reflect.Values easily
-// note: it converts the reflect.Values to []string
-//       you can't get byte, and rune as numbers from this
+// over range overs a reflect.Value as []string
 func over(slice reflect.Value) []string {
 	values := make([]string, slice.Len())
 	for i := 0; i < slice.Len(); i++ {
-		var (
-			v = slice.Index(i)
-			s string
-		)
-
-		switch v.Interface().(type) {
-		case byte:
-			s = string(v.Uint())
-		case rune:
-			s = string(v.Int())
-		default:
-			s = fmt.Sprintf("%v", v)
-		}
-		values[i] = s
+		values[i] = fmt.Sprintf("%v", slice.Index(i))
 	}
 	return values
 }
