@@ -56,10 +56,8 @@ func Show(msg string, slices ...interface{}) {
 
 		// draw the slice elements
 		d.wrap("╔", "╗")
-		d.push("\n")
 		d.middle()
 		d.wrap("╚", "╝")
-		d.push("\n")
 	}
 
 	// WriteString already checks for WriteString method
@@ -112,7 +110,8 @@ func (d drawing) header(msg string) {
 		)
 	}
 
-	d.push(ColorHeader.Sprintf("%-35s%26s \n", " "+msg, info))
+	d.push(ColorHeader.Sprintf("%-35s%26s ", " "+msg, info))
+	d.push("\n")
 }
 
 // wrap draws the header and the footer depending on the left and right values
@@ -133,6 +132,7 @@ func (d drawing) wrap(left, right string) {
 
 		d.push(c.Sprintf("%s%s%s", l, w, r))
 	}
+	d.push("\n")
 }
 
 // middle draws the item's value wrapped between pipes
