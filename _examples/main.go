@@ -24,5 +24,6 @@ func main() {
 
 	s.Writer = f
 	s.Colors(false)
-	s.Show("nums", nums)
+	s.MaxPerLine = 3
+	s.Show("odds", odds)
 }
