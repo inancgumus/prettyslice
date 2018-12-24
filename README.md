@@ -50,7 +50,7 @@ func main() {
 ## Printing Options
 
 * **Writer:** Control where to draw the output. _Default: os.Stdout._
-* **PrintBacking:** Whether to print the backing array. _Default: true._
+* **PrintBacking:** Whether to print the backing array. _Default: false._
 * **PrettyByteRune:** Prints the bytes and runes as characters instead of numbers. _Default: true._
 * **MaxPerLine:** Maximum number of slice items on a line. _Default: 0._
 * **Width:** Number of space characters (_padding_) between the header message and the slice details like len, cap and ptr. _Default: 0._

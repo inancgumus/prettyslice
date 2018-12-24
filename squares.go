@@ -39,7 +39,7 @@ var (
 	PrettyByteRune = true
 
 	// PrintBacking prints the backing array if it's true
-	PrintBacking = true
+	PrintBacking = false
 
 	// Writer controls where to draw the slices
 	Writer io.Writer = os.Stdout
