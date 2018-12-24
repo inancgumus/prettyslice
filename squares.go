@@ -3,46 +3,10 @@ package prettyslice
 import (
 	"fmt"
 	"io"
-	"os"
 	"reflect"
 	"strconv"
 	"strings"
 	"unicode/utf8"
-
-	"github.com/fatih/color"
-)
-
-var (
-	// ColorHeader sets the color for the header
-	ColorHeader = color.New(
-		color.BgHiBlack,
-		color.FgMagenta,
-		color.Bold)
-
-	// ColorSlice sets the color for the slice's items
-	ColorSlice = color.New(color.FgCyan)
-
-	// ColorBacker sets the color for the backing array's items
-	ColorBacker = color.New(color.FgHiBlack)
-
-	// ColorIndex sets the color for the index numbers of the elements
-	ColorIndex = color.New(color.FgHiBlack)
-
-	// MaxPerLine is maximum number of slice items on a line.
-	MaxPerLine = 0
-
-	// Width is the width of the header
-	// It will separate the header message and the slice details with empty spaces
-	Width = 0
-
-	// PrettyByteRune prints byte and rune elements as chars
-	PrettyByteRune = true
-
-	// PrintBacking prints the backing array if it's true
-	PrintBacking = false
-
-	// Writer controls where to draw the slices
-	Writer io.Writer = os.Stdout
 )
 
 // drawing pretty draws a slice
@@ -99,21 +63,6 @@ func Show(msg string, slices ...interface{}) {
 
 	// WriteString already checks for WriteString method
 	io.WriteString(Writer, buf.String())
-}
-
-// Colors is used to enable/disable the color data from the output
-func Colors(enabled bool) {
-	colors := []*color.Color{
-		ColorHeader, ColorSlice, ColorBacker, ColorIndex,
-	}
-
-	for _, color := range colors {
-		if enabled {
-			color.EnableColor()
-		} else {
-			color.DisableColor()
-		}
-	}
 }
 
 // create initializes a new drawing struct.
@@ -247,6 +196,11 @@ func slen(s string) int {
 	return utf8.RuneCountInString(s)
 }
 
+// enough is true if the current is > MaxPerLine
+func enough(index int) bool {
+	return MaxPerLine > 0 && index%MaxPerLine == 0
+}
+
 // over range overs a reflect.Value as []string
 func over(slice reflect.Value, from, to int) []string {
 	values := make([]string, 0, to-from)
@@ -270,11 +224,6 @@ func over(slice reflect.Value, from, to int) []string {
 		values = append(values, s)
 	}
 	return values
-}
-
-// enough is true if the current is > MaxPerLine
-func enough(index int) bool {
-	return MaxPerLine > 0 && index%MaxPerLine == 0
 }
 
 func makeSlice(v reflect.Value) reflect.Value {
