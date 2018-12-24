@@ -30,6 +30,10 @@ var (
 	// MaxPerLine is the max allowed slice items on a line
 	MaxPerLine = 0
 
+	// Width is the width of the header
+	// It will separate the header message and the slice details with empty spaces
+	Width = 0
+
 	// PrettyByteRune prints byte and rune elements as chars
 	PrettyByteRune = true
 
@@ -120,12 +124,12 @@ func (d drawing) header(msg string) {
 	var info string
 	if d.multiple {
 		info = fmt.Sprintf(
-			"(len:%d cap:%d ptr:%d)",
+			" (len:%-2d cap:%-2d ptr:%-4d)",
 			d.slice.Len(), d.slice.Cap(), d.pointer(),
 		)
 	}
 
-	d.push(ColorHeader.Sprintf("%s %s", msg, info))
+	d.push(ColorHeader.Sprintf("%*s%s", -Width, " "+msg, info))
 	d.push("\n")
 }
 
