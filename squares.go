@@ -54,6 +54,14 @@ func Show(msg string, slices ...interface{}) {
 		}
 		d.header(msg)
 
+		if s := d.slice; s.IsNil() {
+			d.push(" <nil slice>\n")
+			continue
+		} else if s.Len() == 0 {
+			d.push(" <empty slice>\n")
+			continue
+		}
+
 		// draw the slice elements
 		d.wrap("╔", "╗")
 		d.middle()
