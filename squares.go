@@ -24,6 +24,9 @@ var (
 	// ColorBacker sets the color for the backing array's items
 	ColorBacker = color.New(color.FgHiBlack)
 
+	// ColorIndex sets the color for the index numbers of the elements
+	ColorIndex = color.New(color.FgHiBlack)
+
 	// Width is the max allowed slice items on a line
 	Width = 0
 
@@ -66,6 +69,7 @@ func Show(msg string, slices ...interface{}) {
 		d.wrap("╔", "╗")
 		d.middle()
 		d.wrap("╚", "╝")
+		d.indexes()
 	}
 
 	// WriteString already checks for WriteString method
@@ -113,12 +117,29 @@ func (d drawing) header(msg string) {
 	var info string
 	if d.multiple {
 		info = fmt.Sprintf(
-			" (len:%-2d cap:%-2d ptr:%-4d)",
+			"(len:%d cap:%d ptr:%d)",
 			d.slice.Len(), d.slice.Cap(), d.pointer(),
 		)
 	}
 
-	d.push(ColorHeader.Sprintf("%-35s%26s ", " "+msg, info))
+	d.push(ColorHeader.Sprintf("%s %s", msg, info))
+	d.push("\n")
+}
+
+// indexes draws the index numbers on top of the slice elements
+func (d drawing) indexes() {
+	for i, v := range over(d.backer) {
+		if enough(i) {
+			break
+		}
+
+		m := 4 + len(v)
+		s := strings.Repeat(" ", m/2)
+		if len(v) == 0 {
+			s = " "
+		}
+		d.push(ColorIndex.Sprintf("%s%-*d", s, m-len(s), i))
+	}
 	d.push("\n")
 }
 
