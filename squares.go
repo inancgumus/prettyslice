@@ -82,7 +82,7 @@ func Show(msg string, slices ...interface{}) {
 		}
 
 		step := MaxPerLine
-		if step == 0 {
+		if step <= 0 {
 			step = l
 		}
 
