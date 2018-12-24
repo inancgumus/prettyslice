@@ -30,6 +30,9 @@ var (
 	// Width is the max allowed slice items on a line
 	Width = 0
 
+	// PrettyByteRune prints byte and rune elements as chars
+	PrettyByteRune = true
+
 	// Writer controls where to draw the slices
 	Writer io.Writer = os.Stdout
 )
@@ -219,7 +222,18 @@ func slen(s string) int {
 func over(slice reflect.Value) []string {
 	values := make([]string, slice.Len())
 	for i := 0; i < slice.Len(); i++ {
-		values[i] = fmt.Sprintf("%v", slice.Index(i))
+		v := slice.Index(i)
+		s := fmt.Sprintf("%v", v)
+
+		if PrettyByteRune {
+			switch v.Interface().(type) {
+			case byte:
+				s = string(v.Uint())
+			case rune:
+				s = string(v.Int())
+			}
+		}
+		values[i] = s
 	}
 	return values
 }
