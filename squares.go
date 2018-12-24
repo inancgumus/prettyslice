@@ -27,8 +27,8 @@ var (
 	// ColorIndex sets the color for the index numbers of the elements
 	ColorIndex = color.New(color.FgHiBlack)
 
-	// Width is the max allowed slice items on a line
-	Width = 0
+	// MaxPerLine is the max allowed slice items on a line
+	MaxPerLine = 0
 
 	// PrettyByteRune prints byte and rune elements as chars
 	PrettyByteRune = true
@@ -238,9 +238,9 @@ func over(slice reflect.Value) []string {
 	return values
 }
 
-// enough is true if the current is > Width
+// enough is true if the current is > MaxPerLine
 func enough(index int) bool {
-	return Width > 0 && index >= Width
+	return MaxPerLine > 0 && index >= MaxPerLine
 }
 
 func makeSlice(v reflect.Value) reflect.Value {
