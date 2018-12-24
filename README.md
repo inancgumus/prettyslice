@@ -43,6 +43,23 @@ func main() {
 	s.Colors(false)
 	s.Show("nums", nums)
 }
-````
+```
+
+---
+
+## Printing Options
+
+* **Writer:** Control where to draw the output. _Default: os.Stdout._
+* **PrintBacking:** Whether to print the backing array. _Default: true._
+* **PrettyByteRune:** Prints the bytes and runes as characters instead of numbers. _Default: true._
+* **MaxPerLine:** Maximum number of slice items on a line. _Default: 0._
+* **Width:** Number of space characters (_padding_) between the header message and the slice details like len, cap and ptr. _Default: 0._
+
+## Coloring Options
+
+* **ColorHeader:** Sets the color for the header. _Default: color.New(color.BgHiBlack, color.FgMagenta, color.Bold)._
+* **ColorSlice:** Sets the color for the slice elements. _Default: color.New(color.FgCyan)._
+* **ColorBacker:** Sets the color for the backing array elements. _Default: color.New(color.FgHiBlack)._
+* **ColorIndex:** Sets the color for the index numbers. _Default: color.New(color.FgHiBlack)._
 
 Have fun!

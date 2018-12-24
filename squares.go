@@ -27,7 +27,7 @@ var (
 	// ColorIndex sets the color for the index numbers of the elements
 	ColorIndex = color.New(color.FgHiBlack)
 
-	// MaxPerLine is the max allowed slice items on a line
+	// MaxPerLine is maximum number of slice items on a line.
 	MaxPerLine = 0
 
 	// Width is the width of the header
@@ -36,6 +36,9 @@ var (
 
 	// PrettyByteRune prints byte and rune elements as chars
 	PrettyByteRune = true
+
+	// PrintBacking prints the backing array if it's true
+	PrintBacking = true
 
 	// Writer controls where to draw the slices
 	Writer io.Writer = os.Stdout
@@ -73,10 +76,24 @@ func Show(msg string, slices ...interface{}) {
 		}
 
 		// draw the slice elements
-		d.wrap("╔", "╗")
-		d.middle()
-		d.wrap("╚", "╝")
-		d.indexes()
+		l := d.backer.Len()
+		if !PrintBacking {
+			l = d.slice.Len()
+		}
+
+		step := MaxPerLine
+		if step == 0 {
+			step = l
+		}
+
+		for f := 0; f < l; f += step {
+			t := f + step
+
+			d.wrap("╔", "╗", f, t)
+			d.middle(f, t)
+			d.wrap("╚", "╝", f, t)
+			d.indexes(f, t)
+		}
 	}
 
 	// WriteString already checks for WriteString method
@@ -134,9 +151,9 @@ func (d drawing) header(msg string) {
 }
 
 // indexes draws the index numbers on top of the slice elements
-func (d drawing) indexes() {
-	for i, v := range over(d.backer) {
-		if enough(i) {
+func (d drawing) indexes(from, to int) {
+	for i, v := range over(d.backer, from, to) {
+		if !PrintBacking && d.backing(from+i) {
 			break
 		}
 
@@ -145,20 +162,20 @@ func (d drawing) indexes() {
 		if len(v) == 0 {
 			s = " "
 		}
-		d.push(ColorIndex.Sprintf("%s%-*d", s, m-len(s), i))
+		d.push(ColorIndex.Sprintf("%s%-*d", s, m-len(s), i+from))
 	}
 	d.push("\n")
 }
 
 // wrap draws the header and the footer depending on the left and right values
-func (d drawing) wrap(left, right string) {
-	for i, v := range over(d.backer) {
-		if enough(i) {
-			break
-		}
-
+func (d drawing) wrap(left, right string, from, to int) {
+	for i, v := range over(d.backer, from, to) {
 		c, l, r, m := ColorSlice, left, right, "═"
-		if d.backing(i) {
+
+		if d.backing(from + i) {
+			if !PrintBacking {
+				break
+			}
 			c, l, r, m = ColorBacker, "+", "+", "-"
 		}
 
@@ -172,15 +189,13 @@ func (d drawing) wrap(left, right string) {
 }
 
 // middle draws the item's value wrapped between pipes
-func (d drawing) middle() {
-	for i, v := range over(d.backer) {
-		if enough(i) {
-			d.push(ColorBacker.Sprintf(" ..."))
-			break
-		}
-
+func (d drawing) middle(from, to int) {
+	for i, v := range over(d.backer, from, to) {
 		p, c := "║", ColorSlice
-		if d.backing(i) {
+		if d.backing(from + i) {
+			if !PrintBacking {
+				break
+			}
 			p, c = "|", ColorBacker
 		}
 
@@ -223,9 +238,14 @@ func slen(s string) int {
 }
 
 // over range overs a reflect.Value as []string
-func over(slice reflect.Value) []string {
-	values := make([]string, slice.Len())
-	for i := 0; i < slice.Len(); i++ {
+func over(slice reflect.Value, from, to int) []string {
+	values := make([]string, 0, to-from)
+
+	if l := slice.Len(); to > l {
+		to = l
+	}
+
+	for i := from; i < to; i++ {
 		v := slice.Index(i)
 		s := fmt.Sprintf("%v", v)
 
@@ -237,14 +257,14 @@ func over(slice reflect.Value) []string {
 				s = string(v.Int())
 			}
 		}
-		values[i] = s
+		values = append(values, s)
 	}
 	return values
 }
 
 // enough is true if the current is > MaxPerLine
 func enough(index int) bool {
-	return MaxPerLine > 0 && index >= MaxPerLine
+	return MaxPerLine > 0 && index%MaxPerLine == 0
 }
 
 func makeSlice(v reflect.Value) reflect.Value {
