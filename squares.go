@@ -103,7 +103,7 @@ func Show(msg string, slices ...interface{}) {
 // Colors is used to enable/disable the color data from the output
 func Colors(enabled bool) {
 	colors := []*color.Color{
-		ColorHeader, ColorSlice, ColorBacker,
+		ColorHeader, ColorSlice, ColorBacker, ColorIndex,
 	}
 
 	for _, color := range colors {
