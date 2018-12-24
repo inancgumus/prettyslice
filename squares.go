@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 	"reflect"
+	"strconv"
 	"strings"
 	"unicode/utf8"
 
@@ -157,12 +158,21 @@ func (d drawing) indexes(from, to int) {
 			break
 		}
 
-		m := 4 + len(v)
-		s := strings.Repeat(" ", m/2)
-		if len(v) == 0 {
-			s = " "
-		}
-		d.push(ColorIndex.Sprintf("%s%-*d", s, m-len(s), i+from))
+		// current index
+		ci := i + from
+
+		// middle length of the index's width
+		mli := len(strconv.Itoa(ci)) / 2
+
+		// total width
+		w := slen(v) + 4
+
+		// left and right paddings
+		lpw := w/2 - mli
+		lp := strings.Repeat(" ", lpw)
+		rp := w - len(lp)
+
+		d.push(ColorIndex.Sprintf("%s%-*d", lp, rp, ci))
 	}
 	d.push("\n")
 }
