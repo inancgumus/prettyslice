@@ -54,6 +54,7 @@ func main() {
 * **PrettyByteRune:** Prints the bytes and runes as characters instead of numbers. _Default: true._
 * **MaxPerLine:** Maximum number of slice items on a line. _Default: 0._
 * **Width:** Number of space characters (_padding_) between the header message and the slice details like len, cap and ptr. _Default: 0._
+* **NormalizePointers:** Prints the addresses of the slice elements as if they're contiguous. It basically normalizes by the element type size. See the source code for more information. _Default: false._
 
 ## Coloring Options
 

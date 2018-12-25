@@ -36,6 +36,23 @@ var (
 	// PrintBacking prints the backing array if it's true
 	PrintBacking = false
 
+	// NormalizePointers prints pointers as if they're contiguous.
+	//
+	// Let's say you've []int64{1, 2}
+	//
+	//              Memory addresses
+	// 1st element: 8000
+	// 2nd element: 8008
+	//
+	// This option prints them like this instead:
+	//
+	//              Memory addresses
+	// 1st element: 8000
+	// 2nd element: 8001
+	//
+	// So, it basically normalizes by the element type size.
+	NormalizePointers = false
+
 	// Writer controls where to draw the slices
 	Writer io.Writer = os.Stdout
 )
