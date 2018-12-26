@@ -21,7 +21,10 @@ var (
 	ColorBacker = color.New(color.FgHiBlack)
 
 	// ColorIndex sets the color for the index numbers of the elements
-	ColorIndex = color.New(color.FgHiBlack)
+	ColorIndex = ColorBacker
+
+	// ColorAddr sets the color for the element addresses
+	ColorAddr = ColorBacker
 
 	// MaxPerLine is maximum number of slice items on a line.
 	MaxPerLine = 0
@@ -35,6 +38,9 @@ var (
 
 	// PrintBacking prints the backing array if it's true
 	PrintBacking = false
+
+	// PrintElementAddr prints the addresses of each element
+	PrintElementAddr = false
 
 	// PrintHex prints the pointers in hexadecimals
 	//

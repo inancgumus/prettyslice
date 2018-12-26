@@ -55,12 +55,15 @@ func main() {
 * **MaxPerLine:** Maximum number of slice items on a line. _Default: 0._
 * **Width:** Number of space characters (_padding_) between the header message and the slice details like len, cap and ptr. _Default: 0._
 * **NormalizePointers:** Prints the addresses of the slice elements as if they're contiguous. It basically normalizes by the element type size. See the source code for more information. _Default: false._
+* **PrintHex:** Prints the pointers as hexadecimals. _Default: false._
+* **PrintElementAddr:** Prints the element addresses. _Default: false._
 
 ## Coloring Options
 
 * **ColorHeader:** Sets the color for the header. _Default: color.New(color.BgHiBlack, color.FgMagenta, color.Bold)._
 * **ColorSlice:** Sets the color for the slice elements. _Default: color.New(color.FgCyan)._
 * **ColorBacker:** Sets the color for the backing array elements. _Default: color.New(color.FgHiBlack)._
-* **ColorIndex:** Sets the color for the index numbers. _Default: color.New(color.FgHiBlack)._
+* **ColorIndex:** Sets the color for the index numbers. _Default: ColorBacker._
+* **ColorAddr:** Sets the color for the element addresses. _Default: ColorBacker._
 
 Have fun!

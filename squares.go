@@ -63,6 +63,11 @@ func Show(msg string, slices ...interface{}) {
 			d.pushNewline()
 			d.indexes(f, t)
 			d.pushNewline()
+
+			if PrintElementAddr {
+				d.addresses(f, t)
+				d.pushNewline()
+			}
 		}
 	}
 
@@ -102,7 +107,7 @@ func (d drawing) header(msg string) {
 
 		info = fmt.Sprintf(
 			f,
-			d.slice.Len(), d.slice.Cap(), d.pointer(),
+			d.slice.Len(), d.slice.Cap(), d.pointer(0),
 		)
 	}
 
@@ -119,18 +124,29 @@ func (d drawing) indexes(from, to int) {
 		// current index
 		ci := i + from
 
-		// middle length of the index's width
-		mli := len(strconv.Itoa(ci)) / 2
+		lp, rp := paddings(len(strconv.Itoa(ci)), slen(v))
+		lps := strings.Repeat(" ", lp)
 
-		// total width
-		w := slen(v) + 4
+		d.push(ColorIndex.Sprintf("%s%-*d", lps, rp, ci))
+	}
+}
 
-		// left and right paddings
-		lpw := w/2 - mli
-		lp := strings.Repeat(" ", lpw)
-		rp := w - len(lp)
+// addresses draw element addresses
+func (d drawing) addresses(from, to int) {
+	for i, v := range over(d.backer, from, to) {
+		if !PrintBacking && d.backing(from+i) {
+			break
+		}
 
-		d.push(ColorIndex.Sprintf("%s%-*d", lp, rp, ci))
+		// current index
+		ci := i + from
+
+		p := d.pointer(ci)
+
+		lp, rp := paddings(len(strconv.FormatInt(p, 10)), slen(v))
+		lps := strings.Repeat(" ", lp)
+
+		d.push(ColorAddr.Sprintf("%s%-*d", lps, rp, p))
 	}
 }
 
@@ -177,14 +193,17 @@ func (d drawing) middle(from, to int) {
 }
 
 // pointer simplifies the pointer data for easy viewing
-func (d drawing) pointer() int64 {
+func (d drawing) pointer(index int) int64 {
 	var s int64 = 1
 
 	if NormalizePointers && d.slice.Len() > 0 {
-		s = int64(d.slice.Index(0).Type().Size())
+		s = int64(d.backer.Index(index).Type().Size())
 	}
 
 	p := int64(d.slice.Pointer())
+	if index != 0 && d.slice.Len() > 0 {
+		p = int64(d.backer.Index(index).Addr().Pointer())
+	}
 
 	trim := int64(10000) // get rid of the leading digits
 	if PrintHex {
@@ -208,6 +227,28 @@ func (d drawing) push(s string) {
 // pushNewline appends a newline into the drawing's buffer
 func (d drawing) pushNewline() {
 	d.push("\n")
+}
+
+// paddings finds out the left and right paddings from two values' lengths
+func paddings(a, b int) (lp int, rp int) {
+	// middle length
+	mli := a / 2
+
+	// total width
+	w := b + 4
+
+	// left and right paddings
+	lp = w/2 - mli
+	rp = w - lp
+
+	if lp < 0 {
+		lp = 0
+	}
+	if rp < 0 {
+		rp = 0
+	}
+
+	return
 }
 
 // slen gets the length of a utf-8 string.
