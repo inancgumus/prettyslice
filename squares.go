@@ -187,6 +187,7 @@ func (d drawing) pointer() int64 {
 
 	trim := int64(10000) // get rid of the leading digits
 	if PrintHex {
+		// do not trim the digits: p % p + 1 = p
 		trim = p + 1
 	}
 
@@ -215,6 +216,7 @@ func enough(index int) bool {
 }
 
 // over range overs a reflect.Value as []string
+// TODO (@inanc): Fix the unnecessary allocation
 func over(slice reflect.Value, from, to int) []string {
 	values := make([]string, 0, to-from)
 
