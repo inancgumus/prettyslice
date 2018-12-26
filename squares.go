@@ -31,6 +31,7 @@ func Show(msg string, slices ...interface{}) {
 			msg = ""
 		}
 		d.header(msg)
+		d.pushNewline()
 
 		if s := d.slice; s.IsNil() {
 			d.push("<nil slice>\n")
@@ -55,9 +56,13 @@ func Show(msg string, slices ...interface{}) {
 			t := f + step
 
 			d.wrap("╔", "╗", f, t)
+			d.pushNewline()
 			d.middle(f, t)
+			d.pushNewline()
 			d.wrap("╚", "╝", f, t)
+			d.pushNewline()
 			d.indexes(f, t)
+			d.pushNewline()
 		}
 	}
 
@@ -102,7 +107,6 @@ func (d drawing) header(msg string) {
 	}
 
 	d.push(ColorHeader.Sprintf("%*s%s", -Width, " "+msg, info))
-	d.push("\n")
 }
 
 // indexes draws the index numbers on top of the slice elements
@@ -128,7 +132,6 @@ func (d drawing) indexes(from, to int) {
 
 		d.push(ColorIndex.Sprintf("%s%-*d", lp, rp, ci))
 	}
-	d.push("\n")
 }
 
 // wrap draws the header and the footer depending on the left and right values
@@ -149,7 +152,6 @@ func (d drawing) wrap(left, right string, from, to int) {
 
 		d.push(c.Sprintf("%s%s%s", l, w, r))
 	}
-	d.push("\n")
 }
 
 // middle draws the item's value wrapped between pipes
@@ -172,7 +174,6 @@ func (d drawing) middle(from, to int) {
 				slen(v), v, p),
 		)
 	}
-	d.push("\n")
 }
 
 // pointer simplifies the pointer data for easy viewing
@@ -202,6 +203,11 @@ func (d drawing) backing(index int) bool {
 // push appends a new string into the drawing's buffer
 func (d drawing) push(s string) {
 	d.buf.WriteString(s)
+}
+
+// pushNewline appends a newline into the drawing's buffer
+func (d drawing) pushNewline() {
+	d.push("\n")
 }
 
 // slen gets the length of a utf-8 string.
