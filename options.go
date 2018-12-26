@@ -36,6 +36,13 @@ var (
 	// PrintBacking prints the backing array if it's true
 	PrintBacking = false
 
+	// PrintHex prints the pointers in hexadecimals
+	//
+	// When it's false, only the last 4 digits of the pointers will be printed as decimals.
+	//
+	// When it's true, all the digits of the pointers will be printed as hexadecimals.
+	PrintHex = false
+
 	// NormalizePointers prints pointers as if they're contiguous.
 	//
 	// Let's say you've []int64{1, 2}

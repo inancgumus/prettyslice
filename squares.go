@@ -90,8 +90,13 @@ func create(slice interface{}, buf *strings.Builder) drawing {
 func (d drawing) header(msg string) {
 	var info string
 	if d.multiple {
+		f := " (len:%-2d cap:%-2d ptr:%-4d)"
+		if PrintHex {
+			f = " (len:%-2d cap:%-2d ptr:%-4x)"
+		}
+
 		info = fmt.Sprintf(
-			" (len:%-2d cap:%-2d ptr:%-4d)",
+			f,
 			d.slice.Len(), d.slice.Cap(), d.pointer(),
 		)
 	}
@@ -178,7 +183,14 @@ func (d drawing) pointer() int64 {
 		s = int64(d.slice.Index(0).Type().Size())
 	}
 
-	return (int64(d.slice.Pointer()) / s) % 10000 // get rid of the leading digits
+	p := int64(d.slice.Pointer())
+
+	trim := int64(10000) // get rid of the leading digits
+	if PrintHex {
+		trim = p + 1
+	}
+
+	return (p / s) % trim
 }
 
 // backing is true if the index belongs to the backing array
