@@ -114,10 +114,10 @@ func (d drawing) header(msg string) {
 	msg = " " + msg
 
 	w, l := Width, len(msg)+len(info)
+	w -= l
 	if l > Width {
 		w = 1
 	}
-	w -= l
 
 	d.push(ColorHeader.Sprintf("%s%*s%s", msg, w, "", info))
 }
