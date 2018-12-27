@@ -6,6 +6,7 @@ import (
 	"reflect"
 	"strconv"
 	"strings"
+	"unicode"
 	"unicode/utf8"
 )
 
@@ -297,13 +298,21 @@ func over(slice reflect.Value, from, to int) []string {
 		s := fmt.Sprintf("%v", v)
 
 		if PrettyByteRune {
+			var c rune
+
 			switch v.Interface().(type) {
 			case byte:
-				s = string(v.Uint())
+				c = rune(v.Uint())
 			case rune:
-				s = string(v.Int())
+				c = rune(v.Int())
+			}
+
+			s = string(c)
+			if unicode.IsSpace(c) {
+				s = `\n`
 			}
 		}
+
 		values = append(values, s)
 	}
 	return values
