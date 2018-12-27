@@ -27,7 +27,7 @@ var (
 	ColorAddr = ColorBacker
 
 	// MaxPerLine is maximum number of slice items on a line
-	MaxPerLine = 0
+	MaxPerLine = 5
 
 	// MaxElements limits the number of elements printed
 	// 0 means print all the elements.
