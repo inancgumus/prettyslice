@@ -53,6 +53,10 @@ func Show(msg string, slices ...interface{}) {
 		}
 
 		for f := 0; f < l; f += step {
+			if enough(f) {
+				break
+			}
+
 			t := f + step
 
 			d.wrap("╔", "╗", f, t)
@@ -265,21 +269,30 @@ func slen(s string) int {
 	return utf8.RuneCountInString(s)
 }
 
-// enough is true if the current is > MaxPerLine
+// enough is true if the current is > MaxElements
 func enough(index int) bool {
-	return MaxPerLine > 0 && index%MaxPerLine == 0
+	return MaxElements != 0 && index > MaxElements
 }
 
 // over range overs a reflect.Value as []string
 // TODO (@inanc): Fix the unnecessary allocation
 func over(slice reflect.Value, from, to int) []string {
-	values := make([]string, 0, to-from)
+	size := to - from
+	if MaxElements != 0 && size > MaxElements {
+		size = MaxElements
+	}
+
+	values := make([]string, 0, size)
 
 	if l := slice.Len(); to > l {
 		to = l
 	}
 
 	for i := from; i < to; i++ {
+		if enough(i) {
+			break
+		}
+
 		v := slice.Index(i)
 		s := fmt.Sprintf("%v", v)
 

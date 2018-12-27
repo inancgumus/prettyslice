@@ -26,8 +26,12 @@ var (
 	// ColorAddr sets the color for the element addresses
 	ColorAddr = ColorBacker
 
-	// MaxPerLine is maximum number of slice items on a line.
+	// MaxPerLine is maximum number of slice items on a line
 	MaxPerLine = 0
+
+	// MaxElements limits the number of elements printed
+	// 0 means print all the elements.
+	MaxElements = 0
 
 	// Width is the width of the header
 	// It will separate the header message and the slice details with empty spaces
