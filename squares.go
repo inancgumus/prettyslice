@@ -298,18 +298,22 @@ func over(slice reflect.Value, from, to int) []string {
 		s := fmt.Sprintf("%v", v)
 
 		if PrettyByteRune {
-			var c rune
+			var r rune
 
 			switch v.Interface().(type) {
 			case byte:
-				c = rune(v.Uint())
+				r = rune(v.Uint())
 			case rune:
-				c = rune(v.Int())
+				r = rune(v.Int())
 			}
 
-			s = string(c)
-			if unicode.IsSpace(c) {
+			s = string(r)
+
+			switch {
+			case unicode.IsSpace(r):
 				s = `\n`
+			case unicode.IsControl(r):
+				s = `\0`
 			}
 		}
 
