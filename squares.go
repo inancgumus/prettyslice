@@ -55,6 +55,8 @@ func Show(msg string, slices ...interface{}) {
 
 		for f := 0; f < l; f += step {
 			if enough(f) {
+				d.push(ColorBacker.Sprintf("...%d more...", l-f))
+				d.pushNewline()
 				break
 			}
 
