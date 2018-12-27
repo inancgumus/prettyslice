@@ -102,7 +102,7 @@ func (d drawing) header(msg string) {
 	if d.multiple {
 		f := " (len:%-2d cap:%-2d ptr:%-4d)"
 		if PrintHex {
-			f = " (len:%-2d cap:%-2d ptr:%-4x)"
+			f = " (len:%-2d cap:%-2d ptr:%-10x)"
 		}
 
 		info = fmt.Sprintf(
@@ -111,7 +111,15 @@ func (d drawing) header(msg string) {
 		)
 	}
 
-	d.push(ColorHeader.Sprintf("%*s%s", -Width, " "+msg, info))
+	msg = " " + msg
+
+	w, l := Width, len(msg)+len(info)
+	if l > Width {
+		w = 1
+	}
+	w -= l
+
+	d.push(ColorHeader.Sprintf("%s%*s%s", msg, w, "", info))
 }
 
 // indexes draws the index numbers on top of the slice elements
