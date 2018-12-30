@@ -35,7 +35,7 @@ var (
 
 	// Width is the width of the header
 	// It will separate the header message and the slice details with empty spaces
-	Width = 0
+	Width = 45
 
 	// PrettyByteRune prints byte and rune elements as chars
 	PrettyByteRune = true
