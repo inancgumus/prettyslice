@@ -318,10 +318,8 @@ func over(slice reflect.Value, from, to int) []string {
 				s = string(r)
 
 				switch {
-				case unicode.IsSpace(r):
-					s = `\n`
-				case unicode.IsControl(r):
-					s = `\0`
+				case unicode.IsSpace(r), unicode.IsControl(r):
+					s = ` `
 				}
 			}
 		}
