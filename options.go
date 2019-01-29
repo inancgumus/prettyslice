@@ -53,6 +53,9 @@ var (
 	// When it's true, all the digits of the pointers will be printed as hexadecimals.
 	PrintHex = false
 
+	// PrintBytesHex prints byte elements as hex digits
+	PrintBytesHex = false
+
 	// NormalizePointers prints pointers as if they're contiguous.
 	//
 	// Let's say you've []int64{1, 2}

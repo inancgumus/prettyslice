@@ -299,6 +299,13 @@ func over(slice reflect.Value, from, to int) []string {
 		v := slice.Index(i)
 		s := fmt.Sprintf("%v", v)
 
+		// this will be overwritten if PrettyByteRune
+		if PrintBytesHex {
+			if b, ok := v.Interface().(byte); ok {
+				s = fmt.Sprintf("%02x", b)
+			}
+		}
+
 		if PrettyByteRune {
 			var (
 				r      rune

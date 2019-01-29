@@ -57,6 +57,7 @@ func main() {
 * **Width:** Number of space characters (_padding_) between the header message and the slice details like len, cap and ptr. _Default: 45._
 * **NormalizePointers:** Prints the addresses of the slice elements as if they're contiguous. It basically normalizes by the element type size. See the source code for more information. _Default: false._
 * **PrintHex:** Prints the pointers as hexadecimals. _Default: false._
+* **PrintBytesHex:** Prints byte elements as hex digits. _Default: false._
 * **PrintElementAddr:** Prints the element addresses. _Default: false._
 
 ## Coloring Options
