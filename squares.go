@@ -315,7 +315,7 @@ func over(slice reflect.Value, from, to int) []string {
 			switch v.Interface().(type) {
 			case byte:
 				r = rune(v.Uint())
-				isRune = true
+				isRune = !PrintBytesHex && true
 			case rune:
 				r = rune(v.Int())
 				isRune = true
