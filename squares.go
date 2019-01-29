@@ -274,14 +274,14 @@ func slen(s string) int {
 
 // enough is true if the current is > MaxElements
 func enough(index int) bool {
-	return MaxElements != 0 && index > MaxElements
+	return MaxElements != 0 && index >= MaxElements
 }
 
 // over range overs a reflect.Value as []string
 // TODO (@inanc): Fix the unnecessary allocation
 func over(slice reflect.Value, from, to int) []string {
 	size := to - from
-	if MaxElements != 0 && size > MaxElements {
+	if MaxElements != 0 && size >= MaxElements {
 		size = MaxElements
 	}
 
