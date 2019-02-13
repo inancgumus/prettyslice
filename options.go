@@ -1,9 +1,6 @@
 package prettyslice
 
 import (
-	"io"
-	"os"
-
 	"github.com/fatih/color"
 )
 
@@ -74,7 +71,7 @@ var (
 	NormalizePointers = false
 
 	// Writer controls where to draw the slices
-	Writer io.Writer = os.Stdout
+	Writer = color.Output
 )
 
 // Colors is used to enable/disable the color data from the output

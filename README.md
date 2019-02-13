@@ -49,7 +49,7 @@ func main() {
 
 ## Printing Options
 
-* **Writer:** Control where to draw the output. _Default: os.Stdout._
+* **Writer:** Control where to draw the output. _Default: colors.Output (It's like os.Stdout but with colors)._
 * **PrintBacking:** Whether to print the backing array. _Default: false._
 * **PrettyByteRune:** Prints the bytes and runes as characters instead of numbers. _Default: true._
 * **MaxPerLine:** Maximum number of slice items on a line. _Default: 5._
