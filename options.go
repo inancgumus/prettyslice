@@ -53,6 +53,10 @@ var (
 	// PrintBytesHex prints byte elements as hex digits
 	PrintBytesHex = false
 
+	// SpaceCharacter gets printed when a space character is found.
+	// (only if PrettyByteRune is true)
+	SpaceCharacter = ' '
+
 	// NormalizePointers prints pointers as if they're contiguous.
 	//
 	// Let's say you've []int64{1, 2}

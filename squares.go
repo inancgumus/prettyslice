@@ -319,21 +319,34 @@ func over(slice reflect.Value, from, to int) []string {
 			case rune:
 				r = rune(v.Int())
 				isRune = true
+			case string:
+				str := v.String()
+
+				var buf strings.Builder
+				for _, r := range str {
+					buf.WriteRune(toSpace(r))
+				}
+				s = buf.String()
 			}
 
 			if isRune {
-				s = string(r)
-
-				switch {
-				case unicode.IsSpace(r), unicode.IsControl(r):
-					s = ` `
-				}
+				s = string(toSpace(r))
 			}
 		}
 
 		values = append(values, s)
 	}
 	return values
+}
+
+func toSpace(r rune) (out rune) {
+	out = r
+
+	switch {
+	case unicode.IsSpace(r), unicode.IsControl(r):
+		out = SpaceCharacter
+	}
+	return
 }
 
 func makeSlice(v reflect.Value) reflect.Value {
